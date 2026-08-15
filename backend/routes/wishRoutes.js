@@ -3,11 +3,9 @@ const Wish = require("../models/Wishes");
 
 const router = express.Router();
 
-router.get("/:recipient", async (req, res) => {
+router.get("/", async (req, res) => {
   try {
-    const wishes = await Wish.find({
-      recipient: req.params.recipient,
-    }).sort({ createdAt: -1 });
+    const wishes = await Wish.find().sort({ createdAt: -1 });
 
     res.json(wishes);
   } catch (error) {

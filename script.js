@@ -583,7 +583,7 @@ async function loadWishes() {
   wishList.innerHTML = "";
 
   try {
-    const url = `${API_URL}/${encodeURIComponent(recipient)}`;
+    const url = API_URL;
 
     console.log("Đang tải lời chúc:", url);
 
@@ -609,7 +609,7 @@ async function loadWishes() {
       wishList.appendChild(createWishElement(wish));
     });
 
-    console.log(`Đã tải ${wishes.length} lời chúc cho "${recipient}"`);
+    console.log(`Đã tải ${wishes.length} lời chúc`);
   } catch (error) {
     console.error("Lỗi lấy lời chúc:", error);
   }
