@@ -1,0 +1,1387 @@
+/* ============================================================
+   TOKENS
+   ============================================================ */
+:root {
+  /* màu sắc - lấy cảm hứng từ giấy dó đỏ & chỉ vàng thêu tay */
+  --maroon-950: #240509;
+  --maroon-900: #35080d;
+  --maroon-800: #591019;
+  --maroon-700: #7c1c26;
+  --maroon-600: #94232f;
+  --gold-500: #c79a4b;
+  --gold-400: #d6b06b;
+  --gold-300: #e8cd93;
+  --cream-050: #faf3e6;
+  --ink: #160304;
+
+  --font-caps: "Cormorant SC", serif;
+  --font-script: "Great Vibes", cursive;
+  --font-body: "Cormorant Garamond", serif;
+
+  --ease-silk: cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+* {
+  box-sizing: border-box;
+}
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--maroon-950);
+  color: var(--cream-050);
+  font-family: var(--font-body);
+  font-size: 18px;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+.amp {
+  font-family: var(--font-script);
+  font-style: normal;
+  padding: 0 0.12em;
+  color: var(--gold-400);
+}
+
+/* dải hoạ tiết dùng chung */
+.motif-line {
+  width: 120px;
+  height: 32px;
+  color: var(--gold-500);
+  opacity: 0.8;
+}
+.motif-line--flip {
+  transform: scaleY(-1);
+}
+
+.divider {
+  display: flex;
+  justify-content: center;
+  margin: 1.6rem 0;
+}
+
+/* ============================================================
+   NỀN GẤM CHUNG — vân giấy đỏ nhẹ bằng gradient, không cần ảnh
+   ============================================================ */
+.section,
+.cover,
+.footer {
+  position: relative;
+  background:
+    radial-gradient(
+      circle at 15% 10%,
+      rgba(199, 154, 75, 0.07),
+      transparent 40%
+    ),
+    radial-gradient(
+      circle at 85% 90%,
+      rgba(199, 154, 75, 0.06),
+      transparent 45%
+    ),
+    linear-gradient(180deg, var(--maroon-900), var(--maroon-950));
+}
+
+/* ============================================================
+   PHONG BÌ MỞ ĐẦU — tông hồng, khung ảnh vòm + ruy băng
+   ============================================================ */
+:root {
+  --rose-950: #2a0a12;
+  --rose-900: #3c1420;
+  --rose-700: #8a3348;
+  --rose-500: #c96f85;
+  --rose-400: #dd91a0;
+  --rose-300: #eec1cb;
+  --rose-100: #f8e4e8;
+  --blush-050: #fbeff0;
+}
+
+.cover {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.4rem;
+  padding: 1.6rem;
+  text-align: center;
+  overflow-y: auto;
+  background:
+    radial-gradient(
+      circle at 20% 15%,
+      rgba(238, 193, 203, 0.16),
+      transparent 45%
+    ),
+    radial-gradient(
+      circle at 85% 80%,
+      rgba(238, 193, 203, 0.14),
+      transparent 45%
+    ),
+    linear-gradient(160deg, var(--rose-950), #1c060c 60%, var(--rose-900));
+  transition:
+    transform 1.1s var(--ease-silk),
+    opacity 1s var(--ease-silk);
+}
+.cover.is-open {
+  transform: translateY(-100%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.cover__eyebrow {
+  font-family: var(--font-caps);
+  letter-spacing: 0.35em;
+  font-size: 0.78rem;
+  color: var(--rose-300);
+  text-transform: uppercase;
+  margin: 0.5rem 0 0;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.cover__eyebrow-line {
+  width: 28px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--rose-400));
+}
+.cover__eyebrow-line:last-child {
+  background: linear-gradient(90deg, var(--rose-400), transparent);
+}
+
+.cover__tap {
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  color: rgba(248, 228, 232, 0.55);
+  margin: 0.6rem 0 0;
+}
+
+.heart-icon {
+  width: 0.72em;
+  height: 0.72em;
+  color: var(--rose-500);
+  vertical-align: -0.05em;
+  margin: 0 0.12em;
+}
+.heart-icon--sm {
+  width: 0.62em;
+  height: 0.62em;
+}
+
+/* cánh hoa & trái tim rơi nhẹ trên phong bì */
+.cover__petals {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.cover__petals span {
+  position: absolute;
+  top: -5%;
+  width: 9px;
+  height: 9px;
+  color: var(--rose-400);
+  opacity: 0.55;
+  animation: fall linear infinite;
+}
+.cover__petals span::before {
+  content: "♥";
+  font-size: 9px;
+}
+@keyframes fall {
+  to {
+    transform: translateY(110vh) rotate(220deg);
+  }
+}
+
+/* ---------- thẻ thiệp chính trên bìa ---------- */
+.invite-card {
+  position: relative;
+  width: min(100%, 360px);
+  height: auto;
+  background:
+    radial-gradient(
+      circle at 12% 8%,
+      rgba(255, 255, 255, 0.5),
+      transparent 30%
+    ),
+    linear-gradient(165deg, var(--blush-050), var(--rose-100) 60%, #f3d9dd);
+  border-radius: 22px;
+  padding: 1rem 1.6rem 1rem;
+  box-shadow:
+    0 30px 60px -20px rgba(20, 2, 8, 0.6),
+    0 0 0 1px rgba(255, 255, 255, 0.4) inset;
+  color: var(--rose-900);
+  overflow: hidden;
+}
+
+/* nắp phong bì hình thang phía sau ảnh */
+.invite-card__flap {
+  position: absolute;
+  top: -40px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120%;
+  height: 170px;
+  background: linear-gradient(180deg, #f6dde1, #eec6cd);
+  clip-path: polygon(50% 34%, 100% 0%, 100% 100%, 0% 100%, 0% 0%);
+}
+
+.invite-card__photo {
+  position: relative;
+  z-index: 2;
+  width: 64%;
+  aspect-ratio: 5/6;
+  margin: 0 auto;
+  border-radius: 120px 120px 8px 8px;
+  overflow: hidden;
+  border: 3px solid #fff;
+  background: linear-gradient(160deg, #f3d3d9, #e8b7c1);
+  box-shadow: 0 12px 24px -10px rgba(60, 10, 20, 0.35);
+}
+.invite-card__photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* nền mờ nhẹ hiển thị trong lúc chờ ảnh thật tải lên */
+  color: transparent;
+}
+
+.invite-card__florals {
+  position: absolute;
+  top: 150px;
+  width: 64px;
+  height: 88px;
+  z-index: 3;
+  filter: drop-shadow(0 6px 10px rgba(60, 10, 20, 0.15));
+}
+.invite-card__florals--left {
+  left: 6px;
+}
+.invite-card__florals--right {
+  right: 6px;
+  transform: scaleX(-1);
+}
+
+.invite-card__kinhgui {
+  position: relative;
+  z-index: 2;
+  margin: 1.6rem 0 0.3rem;
+  font-family: var(--font-caps);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  font-size: 0.78rem;
+  color: var(--rose-700);
+}
+.invite-card__recipient {
+  position: relative;
+  z-index: 2;
+  margin: 0;
+  font-family: var(--font-script);
+  font-size: clamp(1.7rem, 7vw, 2.1rem);
+  color: var(--rose-700);
+}
+
+.invite-card__hr {
+  width: 70%;
+  height: 1px;
+  margin: 1.3rem auto;
+  background: linear-gradient(90deg, transparent, var(--rose-400), transparent);
+}
+
+.invite-card__names {
+  position: relative;
+  z-index: 2;
+  margin: 0 0 0.5rem;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: clamp(1.3rem, 5.5vw, 1.6rem);
+  color: var(--rose-700);
+}
+.invite-card__date {
+  margin: 0;
+  font-family: var(--font-caps);
+  letter-spacing: 0.15em;
+  font-size: 1rem;
+  color: var(--rose-700);
+}
+.chevrons {
+  color: var(--rose-400);
+  font-size: 0.85em;
+}
+.invite-card__savedate {
+  margin: 0.3rem 0 1.6rem;
+  font-family: var(--font-caps);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  font-size: 0.7rem;
+  color: var(--rose-500);
+}
+
+.open-btn {
+  position: relative;
+  z-index: 2;
+  border: none;
+  border-radius: 999px;
+  padding: 0.9rem 2.2rem;
+  font-family: var(--font-caps);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  font-size: 0.82rem;
+  color: var(--rose-100);
+  background: linear-gradient(135deg, var(--rose-700), #6e2436);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  box-shadow: 0 12px 22px -10px rgba(90, 10, 30, 0.55);
+  animation: pulse-btn 2.6s ease-in-out infinite;
+}
+.open-btn__heart {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.18);
+  font-size: 0.7rem;
+}
+.open-btn:active {
+  transform: scale(0.96);
+}
+@keyframes pulse-btn {
+  0%,
+  100% {
+    box-shadow:
+      0 12px 22px -10px rgba(90, 10, 30, 0.55),
+      0 0 0 0 rgba(221, 145, 160, 0.4);
+  }
+  50% {
+    box-shadow:
+      0 12px 22px -10px rgba(90, 10, 30, 0.55),
+      0 0 0 10px rgba(221, 145, 160, 0);
+  }
+}
+
+/* ============================================================
+   BỐ CỤC THIỆP CHÍNH
+   ============================================================ */
+.invitation {
+  position: relative;
+}
+
+.section {
+  padding: 5.5rem 1.5rem;
+  max-width: 640px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.section__eyebrow {
+  font-family: var(--font-caps);
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  font-size: 0.78rem;
+  color: var(--gold-400);
+  margin: 0 0 0.5rem;
+}
+.section__title {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-style: italic;
+  font-size: clamp(1.6rem, 4.6vw, 2.1rem);
+  margin: 0 0 1rem;
+  color: var(--cream-050);
+}
+
+/* reveal khi cuộn trang */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(28px);
+  transition:
+    opacity 1s var(--ease-silk),
+    transform 1s var(--ease-silk);
+}
+[data-reveal].is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ---------- HERO ---------- */
+.hero {
+  min-height: 92vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-top: 3rem;
+}
+.hero__eyebrow {
+  font-family: var(--font-caps);
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  color: var(--gold-400);
+  margin: 0 0 1.2rem;
+}
+.hero__names {
+  font-family: var(--font-script);
+  font-weight: 400;
+  font-size: clamp(2.6rem, 10vw, 4.2rem);
+  margin: 0;
+  line-height: 1.15;
+}
+.hero__date {
+  font-family: var(--font-caps);
+  letter-spacing: 0.18em;
+  font-size: 1rem;
+  color: var(--gold-300);
+  margin-top: 0.4rem;
+}
+.hero__scroll {
+  position: absolute;
+  bottom: 2.4rem;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.78rem;
+  letter-spacing: 0.1em;
+  color: rgba(250, 243, 230, 0.5);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+}
+.hero__arrow {
+  animation: bob 1.8s ease-in-out infinite;
+}
+@keyframes bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(6px);
+  }
+}
+
+/* ============================================================
+   ALBUM / GALLERY
+   ============================================================ */
+
+.gallery {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.7rem;
+  margin-top: 2.2rem;
+}
+
+.gallery__item {
+  padding: 0;
+  border: none;
+  border-radius: 2px;
+  overflow: hidden;
+  cursor: pointer;
+  background: none;
+  position: relative;
+  aspect-ratio: 3 / 4;
+}
+
+/* Ảnh */
+.gallery__item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+
+  transition:
+    transform 0.6s var(--ease-silk),
+    filter 0.4s ease;
+
+  filter: saturate(0.92) sepia(0.06);
+}
+
+/* Hover ảnh */
+.gallery__item:hover img {
+  transform: scale(1.06);
+}
+
+/* Viền vàng mảnh */
+.gallery__item::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  border: 1px solid rgba(214, 176, 107, 0.5);
+
+  pointer-events: none;
+}
+
+/* ============================================================
+   Ô "+N — XEM THÊM"
+   ============================================================ */
+
+.gallery__more {
+  position: relative;
+}
+
+/* Lớp tối phủ lên ảnh */
+.gallery__more::before {
+  content: "";
+
+  position: absolute;
+  inset: 0;
+
+  z-index: 2;
+
+  background: rgba(20, 3, 5, 0.58);
+
+  transition: background 0.35s ease;
+}
+
+/* Nội dung +N */
+.gallery__more-overlay {
+  position: absolute;
+  inset: 0;
+
+  z-index: 3;
+
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  pointer-events: none;
+
+  color: var(--cream-050);
+}
+
+/* +3 */
+.gallery__more-count {
+  display: block;
+
+  font-family: var(--font-caps);
+
+  font-size: clamp(2rem, 8vw, 2.8rem);
+
+  font-weight: 500;
+
+  line-height: 1;
+
+  letter-spacing: 0.04em;
+
+  color: var(--gold-300);
+
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
+}
+
+/* Xem thêm ảnh */
+.gallery__more-text {
+  display: block;
+
+  margin-top: 0.55rem;
+
+  font-family: var(--font-caps);
+
+  font-size: 0.65rem;
+
+  letter-spacing: 0.18em;
+
+  text-transform: uppercase;
+
+  color: rgba(250, 243, 230, 0.88);
+}
+
+/* Hover ô xem thêm */
+.gallery__more:hover::before {
+  background: rgba(20, 3, 5, 0.42);
+}
+
+.gallery__more:hover img {
+  transform: scale(1.06);
+}
+
+/* ============================================================
+   ẢNH THỨ 5 TRỞ ĐI — ẨN KHỎI GIAO DIỆN
+   Nhưng vẫn tồn tại để lightbox sử dụng
+   ============================================================ */
+
+.gallery__item--hidden {
+  display: none;
+}
+
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  background: rgba(10, 2, 3, 0.92);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s ease;
+}
+.lightbox.is-open {
+  opacity: 1;
+  pointer-events: auto;
+}
+.lightbox__image {
+  max-width: min(90vw, 560px);
+  max-height: 78vh;
+  object-fit: contain;
+  border: 1px solid rgba(214, 176, 107, 0.4);
+}
+.lightbox__close,
+.lightbox__nav {
+  position: absolute;
+  background: none;
+  border: 1px solid rgba(214, 176, 107, 0.4);
+  color: var(--gold-300);
+  border-radius: 50%;
+  width: 42px;
+  height: 42px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.lightbox__close {
+  top: 1.2rem;
+  right: 1.2rem;
+}
+.lightbox__nav--prev {
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.lightbox__nav--next {
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.lightbox__count {
+  position: absolute;
+  bottom: 1.4rem;
+  font-family: var(--font-caps);
+  letter-spacing: 0.2em;
+  font-size: 0.8rem;
+  color: var(--gold-300);
+}
+
+/* ---------- GIA ĐÌNH ---------- */
+.families__grid {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 1.4rem;
+  align-items: start;
+  text-align: center;
+}
+.families__divider {
+  width: 1px;
+  align-self: stretch;
+  background: linear-gradient(
+    180deg,
+    transparent,
+    rgba(214, 176, 107, 0.5),
+    transparent
+  );
+}
+.families__label {
+  font-family: var(--font-caps);
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--gold-400);
+  font-size: 0.82rem;
+  margin: 0 0 0.6rem;
+}
+.families__parents {
+  margin: 0 0 0.5rem;
+  font-size: 1.02rem;
+}
+.families__address {
+  margin: 0;
+  font-size: 0.88rem;
+  color: rgba(250, 243, 230, 0.65);
+  font-style: italic;
+}
+.families__formal {
+  margin: 2.4rem 0 1.6rem;
+  font-family: var(--font-caps);
+  letter-spacing: 0.2em;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  color: rgba(250, 243, 230, 0.7);
+}
+.families__couple {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.6rem;
+}
+.families__name {
+  font-family: var(--font-script);
+  font-size: clamp(1.5rem, 5vw, 2rem);
+  margin: 0;
+  color: var(--cream-050);
+}
+.families__role {
+  margin: 0.2rem 0 0;
+  font-family: var(--font-caps);
+  letter-spacing: 0.28em;
+  font-size: 0.72rem;
+  color: var(--gold-400);
+  text-transform: uppercase;
+}
+.families__amp {
+  font-size: 1.8rem;
+}
+
+/* ---------- ĐẾM NGƯỢC & SỰ KIỆN ---------- */
+.countdown {
+  display: flex;
+  justify-content: center;
+  gap: 0.7rem;
+  margin: 2rem 0 2.6rem;
+  flex-wrap: wrap;
+}
+.countdown__box {
+  min-width: 72px;
+  padding: 0.9rem 0.4rem;
+  border: 1px solid rgba(214, 176, 107, 0.4);
+  background: rgba(199, 154, 75, 0.05);
+}
+.countdown__num {
+  display: block;
+  font-family: var(--font-caps);
+  font-size: 1.7rem;
+  color: var(--gold-300);
+}
+.countdown__label {
+  display: block;
+  font-size: 0.72rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(250, 243, 230, 0.6);
+  margin-top: 0.2rem;
+}
+
+.events {
+  display: grid;
+  gap: 1.1rem;
+}
+.event-card {
+  border: 1px solid rgba(214, 176, 107, 0.3);
+  padding: 1.6rem 1.4rem;
+  background: rgba(199, 154, 75, 0.04);
+}
+.event-card__title {
+  margin: 0 0 0.3rem;
+  font-family: var(--font-body);
+  font-style: italic;
+  font-size: 1.25rem;
+  color: var(--cream-050);
+}
+.event-card__time {
+  margin: 0;
+  color: var(--gold-300);
+  font-size: 0.98rem;
+}
+.event-card__note {
+  margin: 0.35rem 0 1.1rem;
+  font-size: 0.85rem;
+  color: rgba(250, 243, 230, 0.6);
+}
+
+/* ---------- ĐỊA ĐIỂM ---------- */
+.location__address {
+  color: rgba(250, 243, 230, 0.75);
+  margin-bottom: 1.6rem;
+}
+.map-frame {
+  border: 1px solid rgba(214, 176, 107, 0.4);
+  overflow: hidden;
+  aspect-ratio: 4/3;
+}
+.map-frame iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  filter: saturate(0.85);
+}
+.map-frame__link {
+  margin-top: 1.2rem;
+  display: inline-block;
+}
+
+.btn {
+  font-family: var(--font-caps);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-size: 0.72rem;
+  padding: 0.85rem 1.6rem;
+  border-radius: 999px;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  transition:
+    transform 0.25s var(--ease-silk),
+    background 0.25s;
+}
+.btn--ghost {
+  background: transparent;
+  border: 1px solid var(--gold-500);
+  color: var(--gold-300);
+}
+.btn--ghost:hover {
+  background: rgba(199, 154, 75, 0.12);
+  transform: translateY(-2px);
+}
+.btn--solid {
+  border: none;
+  background: linear-gradient(135deg, var(--gold-400), var(--gold-500));
+  color: var(--maroon-950);
+  font-weight: 600;
+}
+.btn--solid:hover {
+  transform: translateY(-2px);
+}
+
+/* ---------- LỜI CHÚC ---------- */
+.wishes__intro {
+  color: rgba(250, 243, 230, 0.7);
+  margin-top: -0.4rem;
+}
+.wish-form {
+  display: grid;
+  gap: 0.8rem;
+  margin: 2rem 0 2.4rem;
+  text-align: left;
+}
+.wish-form__input {
+  width: 100%;
+  background: rgba(250, 243, 230, 0.04);
+  border: 1px solid rgba(214, 176, 107, 0.35);
+  color: var(--cream-050);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  padding: 0.8rem 1rem;
+  border-radius: 2px;
+  resize: vertical;
+}
+.wish-form__input::placeholder {
+  color: rgba(250, 243, 230, 0.4);
+}
+.wish-form__input:focus-visible,
+.btn:focus-visible,
+.seal:focus-visible,
+.music-toggle:focus-visible,
+.gallery__item:focus-visible {
+  outline: 2px solid var(--gold-300);
+  outline-offset: 2px;
+}
+.wish-form .btn {
+  justify-self: center;
+  border: none;
+}
+
+.wish-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.9rem;
+  text-align: left;
+}
+.wish-card {
+  border-left: 2px solid var(--gold-500);
+  background: rgba(199, 154, 75, 0.04);
+  padding: 0.9rem 1.1rem;
+  animation: fade-in 0.5s var(--ease-silk);
+}
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.wish-card__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.6rem;
+  margin-bottom: 0.25rem;
+}
+.wish-card__name {
+  font-weight: 600;
+  color: var(--gold-300);
+}
+.wish-card__time {
+  font-size: 0.76rem;
+  color: rgba(250, 243, 230, 0.45);
+  white-space: nowrap;
+}
+.wish-card__text {
+  margin: 0;
+  color: rgba(250, 243, 230, 0.85);
+}
+
+/* ---------- FOOTER ---------- */
+.footer {
+  padding: 4rem 1.5rem 3.5rem;
+  text-align: center;
+}
+.footer__thanks {
+  color: rgba(250, 243, 230, 0.7);
+  font-style: italic;
+  margin: 0 0 0.6rem;
+}
+.footer__signature {
+  font-family: var(--font-script);
+  font-size: 2rem;
+  margin: 0;
+  color: var(--gold-300);
+}
+
+.music-toggle {
+  position: fixed;
+  right: 1.2rem;
+  bottom: 1.2rem;
+  z-index: 40;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: 1px solid var(--gold-500);
+  background: var(--maroon-900);
+  color: var(--gold-300);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.music-toggle__icon {
+  width: 20px;
+  height: 20px;
+}
+.music-toggle__ring {
+  position: absolute;
+  inset: -6px;
+  border: 1px solid rgba(214, 176, 107, 0.35);
+  border-radius: 50%;
+}
+.music-toggle.is-playing .music-toggle__ring {
+  animation: spin-ring 3.2s linear infinite;
+}
+@keyframes spin-ring {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 480px) {
+  .families__grid {
+    grid-template-columns: 1fr;
+    gap: 1.8rem;
+  }
+  .families__divider {
+    width: 60%;
+    height: 1px;
+    margin: 0 auto;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(214, 176, 107, 0.5),
+      transparent
+    );
+  }
+  .families__couple {
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+  .countdown__box {
+    min-width: 64px;
+    padding: 0.7rem 0.3rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .seal,
+  .hero__arrow,
+  .music-toggle.is-playing .music-toggle__ring,
+  .cover__petals span {
+    animation: none !important;
+  }
+  [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+  .cover {
+    transition: none;
+  }
+}
+
+/* ============================================================
+   RESPONSIVE COVER — CARD CAO HƠN + KHÔNG MẤT NÚT
+   ============================================================ */
+
+.cover {
+  min-height: 100dvh;
+  height: 100dvh;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  /* Cho phép cuộn nếu màn hình quá thấp */
+  overflow-y: auto;
+
+  /* Không dùng center tuyệt đối để tránh card bị cắt */
+  justify-content: center;
+
+  padding: 1.5rem 1rem;
+  gap: 0.8rem;
+}
+
+/* ============================================================
+   CARD CHÍNH
+   ============================================================ */
+
+.invite-card {
+  position: relative;
+
+  width: min(92vw, 360px);
+
+  /* Cho phép card cao hơn */
+  min-height: 540px;
+
+  /* Không ép tỷ lệ 1 / 1.6 nữa */
+  aspect-ratio: auto;
+
+  padding: 1rem 1.5rem 1.2rem;
+
+  background:
+    radial-gradient(
+      circle at 12% 8%,
+      rgba(255, 255, 255, 0.5),
+      transparent 30%
+    ),
+    linear-gradient(165deg, var(--blush-050), var(--rose-100) 60%, #f3d9dd);
+
+  border-radius: 22px;
+
+  box-shadow:
+    0 30px 60px -20px rgba(20, 2, 8, 0.6),
+    0 0 0 1px rgba(255, 255, 255, 0.4) inset;
+
+  color: var(--rose-900);
+
+  overflow: hidden;
+}
+
+/* ============================================================
+   ẢNH
+   ============================================================ */
+
+.invite-card__photo {
+  position: relative;
+  z-index: 2;
+
+  width: 64%;
+  max-width: 220px;
+
+  aspect-ratio: 5 / 6;
+
+  margin: 0 auto;
+
+  border-radius: 120px 120px 8px 8px;
+
+  overflow: hidden;
+
+  border: 3px solid #fff;
+
+  background: linear-gradient(160deg, #f3d3d9, #e8b7c1);
+
+  box-shadow: 0 12px 24px -10px rgba(60, 10, 20, 0.35);
+}
+
+/* ============================================================
+   NỘI DUNG CARD
+   ============================================================ */
+
+.invite-card__kinhgui {
+  margin: 1.4rem 0 0.3rem;
+}
+
+.invite-card__recipient {
+  font-size: clamp(1.8rem, 7vw, 2.2rem);
+}
+
+.invite-card__hr {
+  width: 70%;
+  margin: 1.1rem auto;
+}
+
+.invite-card__names {
+  font-size: clamp(1.3rem, 5.5vw, 1.6rem);
+}
+
+.invite-card__savedate {
+  margin-bottom: 1.4rem;
+}
+
+/* ============================================================
+   NÚT MỞ THIỆP
+   ============================================================ */
+
+.open-btn {
+  padding: 0.85rem 2rem;
+
+  font-size: 0.78rem;
+
+  /* Đảm bảo nút không bị co */
+  flex-shrink: 0;
+}
+
+/* ============================================================
+   MÀN HÌNH CAO — CARD ĐẸP VÀ TO
+   ============================================================ */
+
+@media (min-height: 800px) {
+  .cover {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+  }
+
+  .invite-card {
+    min-height: 580px;
+    padding-top: 1.2rem;
+    padding-bottom: 1.4rem;
+  }
+
+  .invite-card__photo {
+    width: 66%;
+    max-width: 230px;
+  }
+
+  .invite-card__kinhgui {
+    margin-top: 1.6rem;
+  }
+
+  .invite-card__hr {
+    margin: 1.2rem auto;
+  }
+
+  .invite-card__savedate {
+    margin-bottom: 1.6rem;
+  }
+
+  .open-btn {
+    padding: 0.9rem 2.2rem;
+    font-size: 0.82rem;
+  }
+}
+
+/* ============================================================
+   MOBILE CAO VỪA
+   Ví dụ: 700–799px
+   ============================================================ */
+
+@media (max-height: 799px) and (min-height: 651px) {
+  .cover {
+    justify-content: center;
+    padding: 1rem;
+  }
+
+  .invite-card {
+    min-height: 520px;
+    width: min(90vw, 350px);
+  }
+
+  .invite-card__photo {
+    width: 60%;
+    max-width: 200px;
+  }
+
+  .invite-card__kinhgui {
+    margin-top: 1.1rem;
+  }
+
+  .invite-card__hr {
+    margin: 0.9rem auto;
+  }
+
+  .invite-card__savedate {
+    margin-bottom: 1rem;
+  }
+}
+
+/* ============================================================
+   ĐIỆN THOẠI THẤP
+   ============================================================ */
+
+@media (max-height: 650px) {
+  .cover {
+    justify-content: flex-start;
+
+    /* Cho phép scroll nếu cần */
+    overflow-y: auto;
+
+    padding-top: 0.7rem;
+    padding-bottom: 0.7rem;
+  }
+
+  .cover__eyebrow {
+    font-size: 0.65rem;
+    margin: 0;
+  }
+
+  .cover__tap {
+    display: none;
+  }
+
+  .invite-card {
+    width: min(88vw, 320px);
+
+    /* Vẫn cao, nhưng giảm một chút */
+    min-height: 490px;
+
+    padding: 0.8rem 1.2rem 1rem;
+  }
+
+  .invite-card__photo {
+    width: 52%;
+    max-width: 165px;
+  }
+
+  .invite-card__flap {
+    height: 135px;
+  }
+
+  .invite-card__florals {
+    top: 120px;
+    width: 52px;
+    height: 72px;
+  }
+
+  .invite-card__kinhgui {
+    margin-top: 0.8rem;
+    font-size: 0.68rem;
+  }
+
+  .invite-card__recipient {
+    font-size: 1.6rem;
+  }
+
+  .invite-card__hr {
+    margin: 0.7rem auto;
+  }
+
+  .invite-card__names {
+    font-size: 1.15rem;
+  }
+
+  .invite-card__date {
+    font-size: 0.8rem;
+  }
+
+  .invite-card__savedate {
+    margin: 0.2rem 0 0.9rem;
+    font-size: 0.6rem;
+  }
+
+  .open-btn {
+    padding: 0.7rem 1.6rem;
+    font-size: 0.7rem;
+  }
+}
+
+/* ============================================================
+   MÀN HÌNH CỰC THẤP
+   ============================================================ */
+
+@media (max-height: 560px) {
+  .cover {
+    justify-content: flex-start;
+    padding-top: 0.4rem;
+  }
+
+  .cover__eyebrow {
+    display: none;
+  }
+
+  .invite-card {
+    min-height: 450px;
+    width: min(82vw, 290px);
+  }
+
+  .invite-card__photo {
+    width: 45%;
+    max-width: 130px;
+  }
+
+  .invite-card__florals {
+    display: none;
+  }
+
+  .invite-card__recipient {
+    font-size: 1.4rem;
+  }
+
+  .invite-card__kinhgui {
+    margin-top: 0.5rem;
+  }
+
+  .invite-card__hr {
+    margin: 0.5rem auto;
+  }
+
+  .invite-card__names {
+    font-size: 1rem;
+  }
+
+  .invite-card__savedate {
+    margin-bottom: 0.6rem;
+  }
+
+  .open-btn {
+    padding: 0.6rem 1.4rem;
+  }
+}
+
+/* ============================================================
+   MOBILE XOAY NGANG
+   ============================================================ */
+
+@media (orientation: landscape) and (max-height: 600px) {
+  .cover {
+    justify-content: flex-start;
+    overflow-y: auto;
+    padding: 0.5rem;
+  }
+
+  .invite-card {
+    width: min(70vw, 300px);
+    min-height: 450px;
+  }
+
+  .cover__eyebrow,
+  .cover__tap {
+    display: none;
+  }
+}
