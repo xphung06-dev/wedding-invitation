@@ -2,16 +2,21 @@ const WEDDING_DATETIME = "2027-02-01T09:00:00";
 const INSIDE_MUSIC_DELAY = 3000;
 const AUTO_SCROLL_DELAY = 2000;
 const AUTO_SCROLL_SPEED = 1.4;
+
 const API_URL = "https://wedding-invitation-i26z.onrender.com/api/wishes";
 
 const urlParams = new URLSearchParams(window.location.search);
 const recipient = (urlParams.get("to") || "Phụng").trim();
 
 const recipientName = document.getElementById("recipientName");
-if (recipientName) recipientName.textContent = recipient;
+
+if (recipientName) {
+  recipientName.textContent = recipient;
+}
 
 const cover = document.getElementById("cover");
 const openBtn = document.getElementById("openInvite");
+
 const coverMusic = document.getElementById("coverMusic");
 const openMusic = document.getElementById("openMusic");
 const insideMusic = document.getElementById("insideMusic");
@@ -19,15 +24,20 @@ const musicToggle = document.getElementById("musicToggle");
 
 let invitationOpened = false;
 let insideMusicStarted = false;
+
 let autoScrollActive = false;
 let autoScrollStarted = false;
 let autoScrollTimer = null;
+
 let userInteracting = false;
 let lastTouchTime = 0;
+
+//  MUSIC
 
 function stopAllMusic() {
   [coverMusic, openMusic, insideMusic].forEach((audio) => {
     if (!audio) return;
+
     audio.pause();
     audio.currentTime = 0;
   });
@@ -35,6 +45,7 @@ function stopAllMusic() {
 
 function setMusicButtonPlaying(isPlaying) {
   if (!musicToggle) return;
+
   musicToggle.classList.toggle("is-playing", isPlaying);
   musicToggle.setAttribute("aria-pressed", String(isPlaying));
 }
@@ -46,7 +57,10 @@ function playCoverMusic() {
   coverMusic.muted = true;
 
   const promise = coverMusic.play();
-  if (promise) promise.catch(() => {});
+
+  if (promise) {
+    promise.catch(() => {});
+  }
 }
 
 window.addEventListener("load", playCoverMusic);
@@ -55,6 +69,7 @@ function startInsideMusic() {
   if (insideMusicStarted || !insideMusic) return;
 
   insideMusicStarted = true;
+
   insideMusic.currentTime = 0;
   insideMusic.volume = 0;
 
@@ -110,10 +125,16 @@ if (openBtn) {
         openMusic.volume = 0.05;
 
         const promise = openMusic.play();
-        if (promise) promise.catch(() => {});
+
+        if (promise) {
+          promise.catch(() => {});
+        }
       }
 
-      cover.classList.add("is-open");
+      if (cover) {
+        cover.classList.add("is-open");
+      }
+
       document.body.style.overflow = "";
 
       setTimeout(() => {
@@ -124,7 +145,9 @@ if (openBtn) {
       }, INSIDE_MUSIC_DELAY);
 
       setTimeout(() => {
-        cover.style.display = "none";
+        if (cover) {
+          cover.style.display = "none";
+        }
       }, 1200);
 
       startAutoScrollAfterDelay();
@@ -135,6 +158,8 @@ if (openBtn) {
 
 document.body.style.overflow = "hidden";
 
+//  auto scroll
+
 function startAutoScroll() {
   if (autoScrollActive) return;
 
@@ -144,6 +169,7 @@ function startAutoScroll() {
     if (!autoScrollActive) return;
 
     window.scrollBy(0, AUTO_SCROLL_SPEED);
+
     requestAnimationFrame(scroll);
   }
 
@@ -188,6 +214,7 @@ window.addEventListener(
   "touchstart",
   () => {
     if (!autoScrollStarted) return;
+
     lastTouchTime = Date.now();
   },
   { passive: true },
@@ -200,6 +227,7 @@ window.addEventListener(
 
     userInteracting = true;
     lastTouchTime = Date.now();
+
     stopAutoScroll();
   },
   { passive: true },
@@ -209,6 +237,7 @@ window.addEventListener(
   "touchend",
   () => {
     if (!autoScrollStarted) return;
+
     lastTouchTime = Date.now();
   },
   { passive: true },
@@ -254,6 +283,7 @@ window.addEventListener("keydown", (e) => {
   }
 });
 
+//  petals
 (function scatterPetals() {
   const wrap = document.querySelector(".cover__petals");
 
@@ -273,6 +303,7 @@ window.addEventListener("keydown", (e) => {
   }
 })();
 
+// Reveal
 const revealItems = document.querySelectorAll("[data-reveal]");
 
 const revealObserver = new IntersectionObserver(
@@ -284,13 +315,16 @@ const revealObserver = new IntersectionObserver(
       }
     });
   },
-  { threshold: 0.15 },
+  {
+    threshold: 0.15,
+  },
 );
 
 revealItems.forEach((el) => {
   revealObserver.observe(el);
 });
 
+//  gallery
 const galleryItems = Array.from(document.querySelectorAll(".gallery__item"));
 
 const moreCount = document.querySelector(".gallery__more-count");
@@ -298,12 +332,14 @@ const moreCount = document.querySelector(".gallery__more-count");
 if (moreCount) {
   const visiblePhotoCount = 3;
   const extraPhotoCount = galleryItems.length - visiblePhotoCount;
+
   moreCount.textContent = `+${extraPhotoCount}`;
 }
 
 const lightbox = document.getElementById("lightbox");
 const lightboxImage = document.getElementById("lightboxImage");
 const lightboxCount = document.getElementById("lightboxCount");
+
 const lightboxClose = document.getElementById("lightboxClose");
 const lightboxPrev = document.getElementById("lightboxPrev");
 const lightboxNext = document.getElementById("lightboxNext");
@@ -314,6 +350,7 @@ function openLightbox(index) {
   if (!galleryItems.length || !lightbox) return;
 
   currentPhoto = index;
+
   updateLightbox();
 
   lightbox.classList.add("is-open");
@@ -330,7 +367,9 @@ function closeLightbox() {
 }
 
 function updateLightbox() {
-  if (!galleryItems.length || !lightboxImage || !lightboxCount) return;
+  if (!galleryItems.length || !lightboxImage || !lightboxCount) {
+    return;
+  }
 
   const item = galleryItems[currentPhoto];
   const img = item.querySelector("img");
@@ -339,6 +378,7 @@ function updateLightbox() {
 
   lightboxImage.src = img.src;
   lightboxImage.alt = img.alt;
+
   lightboxCount.textContent = `${currentPhoto + 1} / ${galleryItems.length}`;
 }
 
@@ -375,18 +415,31 @@ if (lightboxNext) {
 
 if (lightbox) {
   lightbox.addEventListener("click", (e) => {
-    if (e.target === lightbox) closeLightbox();
+    if (e.target === lightbox) {
+      closeLightbox();
+    }
   });
 }
 
 document.addEventListener("keydown", (e) => {
-  if (!lightbox || !lightbox.classList.contains("is-open")) return;
+  if (!lightbox || !lightbox.classList.contains("is-open")) {
+    return;
+  }
 
-  if (e.key === "Escape") closeLightbox();
-  if (e.key === "ArrowLeft") stepPhoto(-1);
-  if (e.key === "ArrowRight") stepPhoto(1);
+  if (e.key === "Escape") {
+    closeLightbox();
+  }
+
+  if (e.key === "ArrowLeft") {
+    stepPhoto(-1);
+  }
+
+  if (e.key === "ArrowRight") {
+    stepPhoto(1);
+  }
 });
 
+//  COUNTDOWN
 const target = new Date(WEDDING_DATETIME).getTime();
 
 const cdDays = document.getElementById("cdDays");
@@ -397,6 +450,10 @@ const cdSeconds = document.getElementById("cdSeconds");
 const pad = (n) => String(n).padStart(2, "0");
 
 function tickCountdown() {
+  if (!cdDays || !cdHours || !cdMinutes || !cdSeconds) {
+    return;
+  }
+
   const diff = target - Date.now();
 
   if (diff <= 0) {
@@ -404,6 +461,7 @@ function tickCountdown() {
     cdHours.textContent = "00";
     cdMinutes.textContent = "00";
     cdSeconds.textContent = "00";
+
     return;
   }
 
@@ -421,6 +479,8 @@ function tickCountdown() {
 tickCountdown();
 setInterval(tickCountdown, 1000);
 
+//  gg calendar
+
 function toGCalStamp(isoLocal) {
   return isoLocal.replace(/[-:]/g, "");
 }
@@ -429,6 +489,7 @@ document.querySelectorAll("[data-cal]").forEach((btn) => {
   btn.addEventListener("click", () => {
     const title = encodeURIComponent(btn.dataset.calTitle);
     const loc = encodeURIComponent(btn.dataset.calLoc);
+
     const start = toGCalStamp(btn.dataset.calStart);
     const end = toGCalStamp(btn.dataset.calEnd);
 
@@ -442,9 +503,11 @@ document.querySelectorAll("[data-cal]").forEach((btn) => {
     window.open(url, "_blank", "noopener");
   });
 });
+//  WISHES
 
 const wishForm = document.getElementById("wishForm");
 const wishList = document.getElementById("wishList");
+
 const nameInput = document.getElementById("wishName");
 const messageInput = document.getElementById("wishMessage");
 
@@ -457,70 +520,128 @@ function createWishElement(wish) {
 
   const name = document.createElement("span");
   name.className = "wish-card__name";
-  name.textContent = wish.name;
+
+  name.textContent = wish.name || wish.senderName || wish.userName || "Khách";
 
   const time = document.createElement("span");
   time.className = "wish-card__time";
 
-  if (wish.createdAt) {
-    const date = new Date(wish.createdAt);
-    time.textContent = date.toLocaleString("vi-VN");
+  const createdAt =
+    wish.createdAt || wish.created_at || wish.createdDate || wish.date;
+
+  if (createdAt) {
+    const date = new Date(createdAt);
+
+    if (!Number.isNaN(date.getTime())) {
+      time.textContent = date.toLocaleString("vi-VN");
+    } else {
+      time.textContent = "Vừa xong";
+    }
   } else {
     time.textContent = "Vừa xong";
   }
 
   const message = document.createElement("p");
   message.className = "wish-card__text";
-  message.textContent = wish.message;
+
+  message.textContent = wish.message || wish.content || wish.text || "";
 
   head.appendChild(name);
   head.appendChild(time);
+
   li.appendChild(head);
   li.appendChild(message);
 
   return li;
 }
 
+/* Chuẩn hóa dữ liệu API */
+function normalizeWishes(data) {
+  if (Array.isArray(data)) {
+    return data;
+  }
+
+  if (data && Array.isArray(data.wishes)) {
+    return data.wishes;
+  }
+
+  if (data && Array.isArray(data.data)) {
+    return data.data;
+  }
+
+  if (data && Array.isArray(data.results)) {
+    return data.results;
+  }
+
+  return [];
+}
+
+/* Tải lời chúc từ MongoDB */
 async function loadWishes() {
+  if (!wishList) return;
+
+  wishList.innerHTML = "";
+
   try {
-    const response = await fetch(`${API_URL}/${encodeURIComponent(recipient)}`);
+    const url = `${API_URL}/${encodeURIComponent(recipient)}`;
+
+    console.log("Đang tải lời chúc:", url);
+
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+      },
+      cache: "no-store",
+    });
 
     if (!response.ok) {
-      throw new Error("Không thể lấy lời chúc");
+      throw new Error(`GET wishes failed: ${response.status}`);
     }
 
-    const wishes = await response.json();
+    const data = await response.json();
 
-    wishList.innerHTML = "";
+    console.log("Dữ liệu lời chúc:", data);
+
+    const wishes = normalizeWishes(data);
 
     wishes.forEach((wish) => {
       wishList.appendChild(createWishElement(wish));
     });
+
+    console.log(`Đã tải ${wishes.length} lời chúc cho "${recipient}"`);
   } catch (error) {
     console.error("Lỗi lấy lời chúc:", error);
   }
 }
 
+/* Gửi lời chúc */
 if (wishForm) {
   wishForm.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const name = nameInput.value.trim();
-    const message = messageInput.value.trim();
+    const name = nameInput ? nameInput.value.trim() : "";
+
+    const message = messageInput ? messageInput.value.trim() : "";
 
     if (!name || !message) return;
 
     const submitButton = wishForm.querySelector('button[type="submit"]');
 
     try {
-      submitButton.disabled = true;
-      submitButton.textContent = "Đang gửi...";
+      if (submitButton) {
+        submitButton.disabled = true;
+        submitButton.textContent = "Đang gửi...";
+      }
 
       const response = await fetch(API_URL, {
         method: "POST",
+
         headers: {
           "Content-Type": "application/json",
+          Accept: "application/json",
         },
+
         body: JSON.stringify({
           recipient,
           name,
@@ -529,28 +650,44 @@ if (wishForm) {
       });
 
       if (!response.ok) {
-        throw new Error("Không thể gửi lời chúc");
+        throw new Error(`POST wishes failed: ${response.status}`);
       }
 
       const data = await response.json();
 
-      wishList.prepend(createWishElement(data.wish));
+      console.log("Lời chúc đã lưu:", data);
+
+      const savedWish = data.wish || data.data || data;
+
+      if (savedWish && wishList) {
+        wishList.prepend(createWishElement(savedWish));
+      }
+
       wishForm.reset();
+
+      /* Tải lại từ database để chắc chắn dữ liệu đã lưu */
+      await loadWishes();
     } catch (error) {
       console.error("Lỗi gửi lời chúc:", error);
+
       alert("Không thể gửi lời chúc. Vui lòng thử lại.");
     } finally {
-      submitButton.disabled = false;
-      submitButton.textContent = "Gửi Lời Chúc";
+      if (submitButton) {
+        submitButton.disabled = false;
+        submitButton.textContent = "Gửi Lời Chúc";
+      }
     }
   });
-
-  loadWishes();
 }
 
+loadWishes();
+
+// music button
 if (musicToggle) {
   musicToggle.addEventListener("click", () => {
-    if (!insideMusicStarted || !insideMusic) return;
+    if (!insideMusicStarted || !insideMusic) {
+      return;
+    }
 
     if (insideMusic.paused) {
       insideMusic
@@ -568,6 +705,7 @@ if (musicToggle) {
   });
 }
 
+// cleanup
 window.addEventListener("beforeunload", () => {
   clearTimeout(autoScrollTimer);
   stopAutoScroll();
