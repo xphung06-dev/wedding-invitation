@@ -2,7 +2,7 @@ const WEDDING_DATETIME = "2027-02-01T09:00:00";
 const INSIDE_MUSIC_DELAY = 3000;
 const AUTO_SCROLL_DELAY = 2000;
 const AUTO_SCROLL_SPEED = 1.4;
-const API_URL = "https://wedding-invitation-i26z.onrender.com";
+const API_URL = "https://wedding-invitation-i26z.onrender.com/api/wishes";
 
 const urlParams = new URLSearchParams(window.location.search);
 const recipient = (urlParams.get("to") || "Phụng").trim();
