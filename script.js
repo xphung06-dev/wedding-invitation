@@ -1,7 +1,17 @@
-const WEDDING_DATETIME = "2027-02-01T09:00:00";
+const WEDDING_DATETIME = "2026-11-19T09:00:00";
 const INSIDE_MUSIC_DELAY = 3000;
 const AUTO_SCROLL_DELAY = 2000;
-const AUTO_SCROLL_SPEED = 1.4;
+
+const AUTO_SCROLL_SPEED_DESKTOP = 60;
+const AUTO_SCROLL_SPEED_MOBILE = 60;
+
+const isTouchDevice = window.matchMedia("(hover: none) and (pointer: coarse)");
+
+function getScrollSpeed() {
+  return isTouchDevice.matches
+    ? AUTO_SCROLL_SPEED_MOBILE
+    : AUTO_SCROLL_SPEED_DESKTOP;
+}
 
 const API_URL = "https://wedding-invitation-i26z.onrender.com/api/wishes";
 
@@ -165,10 +175,32 @@ function startAutoScroll() {
 
   autoScrollActive = true;
 
-  function scroll() {
+  let lastTime = performance.now();
+  let position = window.scrollY; // vị trí thực (giữ số lẻ)
+
+  function scroll(now) {
     if (!autoScrollActive) return;
 
-    window.scrollBy(0, AUTO_SCROLL_SPEED);
+    // thời gian giữa 2 frame (giây), giới hạn để không bị nhảy vọt khi trang đơ
+    const dt = Math.min((now - lastTime) / 1000, 0.05);
+    lastTime = now;
+
+    // nếu vị trí bị thay đổi bên ngoài (người dùng kéo, lightbox...) thì đồng bộ lại
+    if (Math.abs(window.scrollY - position) > 2) {
+      position = window.scrollY;
+    }
+
+    position += getScrollSpeed() * dt;
+
+    window.scrollTo({ top: position, behavior: "instant" });
+
+    // tới cuối trang thì dừng
+    const maxScroll =
+      document.documentElement.scrollHeight - window.innerHeight;
+    if (position >= maxScroll) {
+      stopAutoScroll();
+      return;
+    }
 
     requestAnimationFrame(scroll);
   }
